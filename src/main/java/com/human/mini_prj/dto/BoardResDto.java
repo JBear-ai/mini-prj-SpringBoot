@@ -15,5 +15,6 @@ public class BoardResDto {
     private String content;
     private String email;
     private String name;
+    private int viewCount;
     private LocalDateTime regDate;
 }

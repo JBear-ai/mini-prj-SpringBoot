@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController  // Restfull API, 직렬화/역질렬화 기능 제공
 @RequestMapping("/auth")  // http://localhost:8111/auth/
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
     private final AuthService authService;  // 생성자를 통한 의존성 주입
 

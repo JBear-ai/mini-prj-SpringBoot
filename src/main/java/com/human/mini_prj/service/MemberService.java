@@ -81,6 +81,9 @@ public class MemberService {
         return new PageResDto<>(memberResDtoPage);
     }
 
+
+
+
     // Entity를 DTO로 변환하는 메서드 (pwd는 제외)
     private MemberResDto toDto(Member member) {
         MemberResDto dto = new MemberResDto();

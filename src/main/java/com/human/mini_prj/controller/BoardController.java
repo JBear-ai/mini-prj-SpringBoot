@@ -16,6 +16,7 @@ import java.util.List;
 @RestController // Restfull API를 지원하는 컨크롤러(직렬화/역직렬화) 기능을 가지고 있음
 @RequestMapping("/board")   // http://localhost:8111/board/
 @RequiredArgsConstructor       // 생성자를 통한 의존성 주입을 자동 생성
+@CrossOrigin(origins = "http://localhost:3000")
 public class BoardController {
     private final BoardService boardService;  // 의존성 주입
 
@@ -63,5 +64,16 @@ public class BoardController {
             @RequestParam(defaultValue = "10") int size
     ) {
         return ResponseEntity.ok(boardService.getBoardPage(page, size));
+    }
+
+    // 게시글 검색
+    // GET http://localhost:8111/board/search?keyword=스프링&type=all&page=0&size=10
+    @GetMapping("/search")
+    public ResponseEntity<PageResDto<BoardResDto>> boardSearch(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(boardService.searchBoard(keyword, page, size));
     }
 }
