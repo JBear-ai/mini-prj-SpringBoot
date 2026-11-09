@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+// 현재 로그인한 사용자 꺼내기
 public final class SecurityUtil {
     private SecurityUtil() {}
 
