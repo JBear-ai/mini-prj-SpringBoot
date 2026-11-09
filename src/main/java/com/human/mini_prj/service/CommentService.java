@@ -9,6 +9,7 @@ import com.human.mini_prj.entity.Member;
 import com.human.mini_prj.repository.BoardRepository;
 import com.human.mini_prj.repository.CommentRepository;
 import com.human.mini_prj.repository.MemberRepository;
+import com.human.mini_prj.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -44,46 +45,30 @@ public class CommentService {
     // 댓글 작성
     public boolean writeComment(CommentWriteReqDto dto) {
         try {
-            // 작성자 조회
-            Optional<Member> member = memberRepository.findByEmail(dto.getEmail());
-            if (member.isEmpty()) {
-                throw new IllegalArgumentException("해당 회원이 존재하지 않습니다: " + dto.getEmail());
-            }
-            // 게시글 조회
-            Optional<Board> board = boardRepository.findById(dto.getBoardId());
-            if (board.isEmpty()) {
-                throw new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + dto.getBoardId());
-            }
+            String email = SecurityUtil.currentEmail();
+            Member member = memberRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다: " + email));
+            Board board = boardRepository.findById(dto.getBoardId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다: " + dto.getBoardId()));
             Comment comment = new Comment();
             comment.setContent(dto.getContent());
-            comment.setMember(member.get());
-            comment.setBoard(board.get());
+            comment.setMember(member);
+            comment.setBoard(board);
             commentRepository.save(comment);
             return true;
         } catch (Exception e) {
             log.error("댓글 작성 시 오류 발생 : {}", e.getMessage());
             return false;
         }
-
     }
 
     // 댓글 수정
     public boolean updateComment(Long commentId, CommentWriteReqDto dto) {
         try {
-            Optional<Comment> optionalComment = commentRepository.findById(commentId);
-            if (optionalComment.isEmpty()) {
-                throw new IllegalArgumentException("해당 댓글이 존재하지 않습니다: " + commentId);
-            }
-            Comment comment = optionalComment.get();
-
-            // 작성자가 본인인지 확인
-            Member member = comment.getMember();
-            String email = member.getEmail();
-            if (!email.equals(dto.getEmail())) {
-                throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
-            }
-
-            comment.setContent(dto.getContent()); // 변경 감지(Dirty Checking)로 UPDATE
+            Comment comment = commentRepository.findById(commentId)
+                    .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다: " + commentId));
+            checkWriter(comment.getMember());
+            comment.setContent(dto.getContent());
             return true;
         } catch (Exception e) {
             log.error("댓글 수정 시 오류 발생: {}", e.getMessage());
@@ -116,6 +101,12 @@ public class CommentService {
         Page<Comment> commentPage = commentRepository.findByMemberEmail(email, pageable);
         Page<CommentResDto> commentResDtoPage = commentPage.map(this::toDto);
         return new PageResDto<>(commentResDtoPage);
+    }
+
+    private void checkWriter(Member writer) {
+        if (!writer.getEmail().equals(SecurityUtil.currentEmail())) {
+            throw new IllegalArgumentException("작성자만 수정/삭제할 수 있습니다.");
+        }
     }
 
     // Entity -> Dto
