@@ -61,7 +61,7 @@ public class AuthService {
     private Member toEntity(SignUpReqDto dto) {
         Member member = new Member();
         member.setName(dto.getName());
-        member.setPwd(dto.getPwd());
+        member.setPwd(passwordEncoder.encode(dto.getPwd()));
         member.setEmail(dto.getEmail());
         return member;
     }
