@@ -19,6 +19,7 @@ import java.util.List;
 
 @Slf4j
 @Component
+// 키 준비와 토큰 생성
 public class TokenProvider {
     private static final String AUTH_KEY = "auth";
     private final SecretKey key;
