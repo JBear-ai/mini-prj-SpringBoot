@@ -59,8 +59,6 @@ public class ChatService {
         if (room.isSessionEmpty()) chatRooms.remove(roomId);
     }
 
-
-
     // 같은 방 세션 전체에 전송
     public void sendMessageToAll(String roomId, ChatMessageDto chat) {
         ChatRoomResDto room = findRoomById(roomId);
@@ -74,7 +72,5 @@ public class ChatService {
             }
         }
     }
-
-
 
 }
