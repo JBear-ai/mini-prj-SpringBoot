@@ -55,6 +55,4 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
         log.info("연결 종료: {} ({})", session.getId(), status);
     }
-
-
 }
