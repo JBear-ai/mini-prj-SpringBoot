@@ -108,7 +108,7 @@ public class BoardService {
 
     // 제목 또는 내용에 키워드 포함
     public PageResDto<BoardResDto> searchBoard(String keyword, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("rgeTime").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("regTime").descending());
         Page<Board> boardPage = boardRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
         Page<BoardResDto> boardResDtoPage = boardPage.map(this::toDto);
         return new PageResDto<>(boardResDtoPage);
