@@ -1,5 +1,7 @@
 package com.human.mini_prj.rag.dto;
 
-// Spring -> Fast API 질의 요청: 질문 + READY 허용 목록 + 가져 올 개수
-public record QueryReqDto(String question, String[] boardIds, int takK) {
+import java.util.List;
+
+// Spring -> FastAPI 질의 요청: 질문 + READY 허용 목록 + 가져 올 개수
+public record QueryReqDto(String question, List<Long> boardIds, int tokK) {
 }
