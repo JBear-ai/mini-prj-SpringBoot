@@ -21,7 +21,7 @@ public class AdminController {
     }
 
     // 전체 재 색인
-    @PostMapping("/reag/reindex")
+    @PostMapping("/rag/reindex")
     public ResponseEntity<Integer> reindexAll() {
         return ResponseEntity.ok(boardIndexService.reindexAll());
     }

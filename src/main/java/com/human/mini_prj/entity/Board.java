@@ -5,6 +5,7 @@ import com.human.mini_prj.constant.IndexStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -37,7 +38,7 @@ public class Board {
     @Column(length = 500)
     private String indexError;  // 색인 실패 사유
 
-    private String indexedAt;   // 마지막 색인 성공 시각
+    private LocalDateTime indexedAt;   // 마지막 색인 성공 시각
 
     private LocalDateTime regTime;  // 작성일
     @PrePersist
